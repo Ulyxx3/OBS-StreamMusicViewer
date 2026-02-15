@@ -1,0 +1,152 @@
+/* Reset et styles de base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: transparent;
+    overflow: hidden;
+}
+
+/* Container principal du widget */
+.widget-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    max-width: 450px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 16px;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Contenu avec animation */
+.content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.content.fade-in {
+    opacity: 1;
+}
+
+.content.fade-out {
+    opacity: 0;
+}
+
+/* Container de la pochette d'album */
+.album-art-container {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.album-art {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    display: none; /* Caché par défaut, affiché seulement si disponible */
+}
+
+/* Icône musicale de fallback */
+.music-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.album-art[style*="display: block"] ~ .music-icon {
+    display: none;
+}
+
+/* Informations du morceau */
+.track-info {
+    flex: 1;
+    min-width: 0; /* Permet le text-overflow */
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.track-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.track-artist {
+    font-size: 14px;
+    font-weight: 400;
+    color: #b3b3b3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Animation de pulsation subtile pour l'icône musicale */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.3;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+}
+
+.music-icon {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Effet de survol (optionnel) */
+.widget-container:hover {
+    box-shadow: 
+        0 12px 48px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+/* Responsive pour petits écrans */
+@media (max-width: 600px) {
+    .widget-container {
+        bottom: 10px;
+        right: 10px;
+        max-width: 320px;
+        padding: 16px;
+    }
+    
+    .album-art {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .track-title {
+        font-size: 16px;
+    }
+    
+    .track-artist {
+        font-size: 13px;
+    }
+}

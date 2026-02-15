@@ -1,0 +1,35 @@
+# Build outputs
+bin/
+obj/
+*.exe
+*.pdb
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# Generated files
+current_song.json
+temp_*.jpg
+temp_*.jpeg
+temp_*.png
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary documentation (keep only README.md)
+NEXT_STEP.md
+SUCCESS.md
