@@ -16,4 +16,8 @@
     <!-- The missing icon will use default -->
   </PropertyGroup>
 
+  <ItemGroup>
+    <Resource Include="OSMV_logo.ico" />
+  </ItemGroup>
+
 </Project>
