@@ -89,19 +89,25 @@ body {
     font-size: 18px;
     font-weight: 600;
     color: #ffffff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .track-artist {
     font-size: 14px;
     font-weight: 400;
     color: #b3b3b3;
-    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Défilement style Spotify */
+.track-title .scroll-text,
+.track-artist .scroll-text {
+    display: inline-block;
+    white-space: nowrap;
+    will-change: transform;
 }
 
 /* Animation de pulsation subtile pour l'icône musicale */

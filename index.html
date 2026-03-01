@@ -16,8 +16,8 @@
                 <div class="music-icon">🎵</div>
             </div>
             <div class="track-info">
-                <div id="title" class="track-title">Aucune lecture en cours</div>
-                <div id="artist" class="track-artist"></div>
+                <div id="title" class="track-title"><span class="scroll-text">Aucune lecture en cours</span></div>
+                <div id="artist" class="track-artist"><span class="scroll-text"></span></div>
             </div>
         </div>
     </div>
@@ -80,8 +80,8 @@
                 // Si aucune chanson n'est en lecture
                 if (!songData) {
                     await this.fadeOut();
-                    this.elements.title.textContent = 'Aucune lecture en cours';
-                    this.elements.artist.textContent = '';
+                    this.setScrollText(this.elements.title, 'Aucune lecture en cours');
+                    this.setScrollText(this.elements.artist, '');
                     this.elements.albumArt.style.display = 'none';
                     await this.fadeIn();
                     return;
@@ -95,8 +95,8 @@
                     await this.fadeOut();
 
                     // Mise à jour du contenu
-                    this.elements.title.textContent = songData.title;
-                    this.elements.artist.textContent = songData.artist;
+                    this.setScrollText(this.elements.title, songData.title);
+                    this.setScrollText(this.elements.artist, songData.artist);
 
                     // Mise à jour de la pochette d'album
                     if (songData.thumbnail) {
@@ -111,6 +111,59 @@
 
                     this.currentSong = songData;
                 }
+            }
+
+            // Définit le texte et active le défilement si nécessaire
+            setScrollText(container, text) {
+                const span = container.querySelector('.scroll-text');
+
+                // Annuler le cycle en cours
+                if (span._scrollTimer) {
+                    clearTimeout(span._scrollTimer);
+                    span._scrollTimer = null;
+                }
+                span.style.transition = 'none';
+                span.style.transform = 'translateX(0)';
+                span.textContent = text;
+
+                // Mesurer le débordement après rendu
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        const overflow = span.scrollWidth - container.clientWidth;
+                        if (overflow > 0) {
+                            this.startScrollCycle(span, overflow);
+                        }
+                    });
+                });
+            }
+
+            // Cycle : pause → ← gauche → pause → droite → → recommence
+            startScrollCycle(span, overflow) {
+                const scrollDuration = Math.min(18000, Math.max(5000, (overflow / 50) * 1000));
+                const pauseDuration = 3000; // 3s aux deux bouts
+
+                const doCycle = () => {
+                    // Phase 1 : pause au début (position gauche)
+                    span._scrollTimer = setTimeout(() => {
+                        // Phase 2 : défilement vers la gauche
+                        span.style.transition = `transform ${scrollDuration}ms linear`;
+                        span.style.transform = `translateX(-${overflow}px)`;
+
+                        // Phase 3 : pause à la fin
+                        span._scrollTimer = setTimeout(() => {
+                            span._scrollTimer = setTimeout(() => {
+                                // Phase 4 : retour vers la droite en douceur
+                                span.style.transition = `transform ${scrollDuration}ms linear`;
+                                span.style.transform = 'translateX(0)';
+
+                                // Après le retour, recommencer le cycle
+                                span._scrollTimer = setTimeout(doCycle, scrollDuration);
+                            }, pauseDuration);
+                        }, scrollDuration);
+                    }, pauseDuration);
+                };
+
+                doCycle();
             }
 
             fadeOut() {
