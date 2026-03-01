@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Now Playing - Apple Music</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div id="now-playing-widget" class="widget-container">
         <div id="content" class="content">
@@ -25,8 +27,9 @@
             constructor() {
                 this.currentSong = null;
                 this.updateInterval = 1000; // 1 seconde
+                this.autoReloadInterval = 10 * 60 * 1000; // 10 minutes
                 this.jsonFile = 'current_song.json';
-                
+
                 // Éléments DOM
                 this.elements = {
                     container: document.getElementById('now-playing-widget'),
@@ -35,25 +38,25 @@
                     title: document.getElementById('title'),
                     artist: document.getElementById('artist')
                 };
-                
+
                 this.init();
             }
-            
+
             init() {
                 console.log('🎵 Now Playing Widget initialisé');
                 this.startPolling();
             }
-            
+
             async fetchCurrentSong() {
                 try {
                     // Ajouter un timestamp pour éviter le cache
                     const cacheBuster = `?t=${Date.now()}`;
                     const response = await fetch(this.jsonFile + cacheBuster);
-                    
+
                     if (!response.ok) {
                         throw new Error('Fichier JSON non trouvé');
                     }
-                    
+
                     const data = await response.json();
                     return data;
                 } catch (error) {
@@ -61,18 +64,18 @@
                     return null;
                 }
             }
-            
+
             hasSongChanged(newSong) {
                 if (!this.currentSong && newSong) return true;
                 if (this.currentSong && !newSong) return true;
                 if (!this.currentSong && !newSong) return false;
-                
+
                 return (
                     this.currentSong.title !== newSong.title ||
                     this.currentSong.artist !== newSong.artist
                 );
             }
-            
+
             async updateDisplay(songData) {
                 // Si aucune chanson n'est en lecture
                 if (!songData) {
@@ -83,18 +86,18 @@
                     await this.fadeIn();
                     return;
                 }
-                
+
                 // Vérifier si la chanson a changé
                 if (this.hasSongChanged(songData)) {
                     console.log('🎵 Nouvelle chanson:', songData.title, '-', songData.artist);
-                    
+
                     // Transition fade out
                     await this.fadeOut();
-                    
+
                     // Mise à jour du contenu
                     this.elements.title.textContent = songData.title;
                     this.elements.artist.textContent = songData.artist;
-                    
+
                     // Mise à jour de la pochette d'album
                     if (songData.thumbnail) {
                         this.elements.albumArt.src = `data:image/jpeg;base64,${songData.thumbnail}`;
@@ -102,14 +105,14 @@
                     } else {
                         this.elements.albumArt.style.display = 'none';
                     }
-                    
+
                     // Transition fade in
                     await this.fadeIn();
-                    
+
                     this.currentSong = songData;
                 }
             }
-            
+
             fadeOut() {
                 return new Promise(resolve => {
                     this.elements.content.classList.remove('fade-in');
@@ -117,7 +120,7 @@
                     setTimeout(resolve, 300); // Durée de la transition
                 });
             }
-            
+
             fadeIn() {
                 return new Promise(resolve => {
                     this.elements.content.classList.remove('fade-out');
@@ -125,27 +128,33 @@
                     setTimeout(resolve, 300); // Durée de la transition
                 });
             }
-            
+
             async poll() {
                 const songData = await this.fetchCurrentSong();
                 await this.updateDisplay(songData);
             }
-            
+
             startPolling() {
                 // Premier appel immédiat
                 this.poll();
-                
+
                 // Ensuite polling régulier
                 setInterval(() => {
                     this.poll();
                 }, this.updateInterval);
+
+                // Rechargement automatique toutes les 10 minutes pour éviter les bugs d'affichage
+                setTimeout(() => {
+                    location.reload();
+                }, this.autoReloadInterval);
             }
         }
-        
+
         // Initialiser le widget au chargement de la page
         document.addEventListener('DOMContentLoaded', () => {
             new NowPlayingWidget();
         });
     </script>
 </body>
+
 </html>
