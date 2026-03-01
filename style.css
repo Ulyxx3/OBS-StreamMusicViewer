@@ -5,9 +5,10 @@
     box-sizing: border-box;
 }
 
+html,
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: transparent;
+    background: transparent !important;
     overflow: hidden;
 }
 
@@ -18,11 +19,9 @@ body {
     right: 20px;
     max-width: 450px;
     padding: 20px;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(15, 15, 15, 0.88);
     border-radius: 16px;
-    box-shadow: 
+    box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.4),
         0 0 0 1px rgba(255, 255, 255, 0.1) inset;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -57,7 +56,8 @@ body {
     border-radius: 8px;
     object-fit: cover;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-    display: none; /* Caché par défaut, affiché seulement si disponible */
+    display: none;
+    /* Caché par défaut, affiché seulement si disponible */
 }
 
 /* Icône musicale de fallback */
@@ -71,14 +71,15 @@ body {
     pointer-events: none;
 }
 
-.album-art[style*="display: block"] ~ .music-icon {
+.album-art[style*="display: block"]~.music-icon {
     display: none;
 }
 
 /* Informations du morceau */
 .track-info {
     flex: 1;
-    min-width: 0; /* Permet le text-overflow */
+    min-width: 0;
+    /* Permet le text-overflow */
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -105,10 +106,13 @@ body {
 
 /* Animation de pulsation subtile pour l'icône musicale */
 @keyframes pulse {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 0.3;
         transform: translate(-50%, -50%) scale(1);
     }
+
     50% {
         opacity: 0.5;
         transform: translate(-50%, -50%) scale(1.05);
@@ -121,7 +125,7 @@ body {
 
 /* Effet de survol (optionnel) */
 .widget-container:hover {
-    box-shadow: 
+    box-shadow:
         0 12px 48px rgba(0, 0, 0, 0.5),
         0 0 0 1px rgba(255, 255, 255, 0.15) inset;
     transform: translateY(-2px);
@@ -136,16 +140,16 @@ body {
         max-width: 320px;
         padding: 16px;
     }
-    
+
     .album-art {
         width: 60px;
         height: 60px;
     }
-    
+
     .track-title {
         font-size: 16px;
     }
-    
+
     .track-artist {
         font-size: 13px;
     }
