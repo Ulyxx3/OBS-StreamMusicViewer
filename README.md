@@ -96,6 +96,8 @@ In the future, i want to add :
 - a bar for where we are on the music 
 - the color changing with the color of the album cover
 - a better support for sites (like newgrounds) where there is no cover or artist support (maybe get rid of the Windows Media Control limits)
+- a Linux version
+- a whole interface on the app for controlling what is in the final output (show/hide the bar, show/hide the visualizer)
 
 ## 🤝 Contributing
 Contributions are welcome! Feel free to open issues or submit pull requests.
